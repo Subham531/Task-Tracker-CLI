@@ -5,13 +5,14 @@ class Database_manager:
     def __init__(self,db_path = 'data.db'):
         self.connection = sqlite3.connect(db_path)
         self.cursor = self.connection.cursor()
+        self.create_table()
         
     def create_table(self):
         self.cursor.execute(
             '''
-                CREATE TABLE task(
+                CREATE TABLE IF NOT EXISTS task(
                 
-                    id INT PRIMARY KEY AUTOINCREMENT,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     title TEXT NOT NULL,
                     description TEXT,
                     status TEXT DEFAULT 'todo',
@@ -24,17 +25,18 @@ class Database_manager:
 
 
     def add_task(self,task):
+        
 
         query  =  '''
                 INSERT INTO task(title,description,status,created_at)
                 VALUES(?,?,?,?);
         '''
-
+    
         values = (
             task.title,
             task.description,
-            task.created_at.isoformat(),
-            task.due_date.isoformat()
+            task.created_at.isoformat() if task.created_at else None,
+            task.due_date.isoformat() if task.due_date else None
         )
 
         self.cursor.execute(query,values)
@@ -48,7 +50,7 @@ class Database_manager:
                 WHERE id = ?
             '''
         
-        self.cursor.execute(query,status,id)
+        self.cursor.execute(query,(status,id))
 
         self.connection.commit()
 
@@ -62,7 +64,7 @@ class Database_manager:
             query = "SELECT * FROM task"
             self.cursor.execute(query)
         
-        self.cursor.fetchall()
+        return self.cursor.fetchall()
 
 
     def close(self):

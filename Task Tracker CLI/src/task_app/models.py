@@ -48,9 +48,9 @@ class Task:
 
 
 
-task1 =  Task(1, "Buy eggs","For 30g of proteins") 
+# task1 =  Task(1, "Buy eggs","For 30g of proteins") 
 
-task2 = Task(2, "Go to gym")
+# task2 = Task(2, "Go to gym")
 
-print(repr(task1))
+# print(repr(task1))
 
