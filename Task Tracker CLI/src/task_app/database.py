@@ -28,13 +28,14 @@ class Database_manager:
         
 
         query  =  '''
-                INSERT INTO task(title,description,status,created_at)
-                VALUES(?,?,?,?);
+                INSERT INTO task(title,description,status,created_at,due_date)
+                VALUES(?,?,?,?,?);
         '''
     
         values = (
             task.title,
             task.description,
+            task.status,
             task.created_at.isoformat() if task.created_at else None,
             task.due_date.isoformat() if task.due_date else None
         )
@@ -66,6 +67,24 @@ class Database_manager:
         
         return self.cursor.fetchall()
 
+    def del_task(self, id:int = None):
+
+        if id:
+            query = "DELETE FROM task WHERE id = ?"
+
+            self.cursor.execute(query,(id,))
+        
+        else:
+            query = "DELETE FROM task"
+            self.cursor.execute(query)
+
+            self.cursor.execute("DELETE FROM sqlite_sequence WHERE name='task'")
+        
+        self.connection.commit()
+
+    def vacuum(self):
+        self.cursor.execute("VACUUM")
+        self.connection.commit()
 
     def close(self):
         self.connection.close()

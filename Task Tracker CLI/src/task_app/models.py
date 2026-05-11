@@ -12,7 +12,7 @@ class Task:
     id: int
     title: str
     description: str = ""
-    status: TaskStatus = TaskStatus.TODO
+    status: str = TaskStatus.TODO.value
     created_at: datetime = None
     due_date: datetime = None
     

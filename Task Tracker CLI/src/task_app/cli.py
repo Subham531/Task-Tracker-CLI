@@ -11,7 +11,8 @@ db = Database_manager()
 @app.command()
 def add(title: str,description:str = typer.Argument(""),due_date:Optional[str]= None):
     
-    db.add_task(Task(id=None,title = title, description=description,due_date=due_date))
+    db.add_task(Task(id=None,title=title, description=description, status=TaskStatus.TODO.value, due_date=due_date))
+    typer.echo(f"Task '{title}' added with status 'todo'.")
 
 
 @app.command()
@@ -44,7 +45,20 @@ def list_task(status: Optional[str]= None):
     for task in tasks:
         typer.echo(f"{task[0]}. [{task[3]}] {task[1]}: {task[2]}")
     
+@app.command()
+def delete_task(id: Optional[int] = typer.Option(None, help="Task ID to delete")):
+    if id:
+        db.del_task(id)
+        typer.echo(f"Task {id} deleted successfully.")
+    else:
+        confirm = typer.confirm("Are you sure you want to delete all tasks?")
+        if confirm:
+            db.del_task()
+            db.vacuum()
+            typer.echo("All tasks deleted and reset")
+        else:
+            typer.echo('Deletion cancelled')
 
-    
+
 if __name__ == '__main__':
     app()
