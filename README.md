@@ -2,8 +2,7 @@
 
 A command-line application for managing tasks with status tracking, built with Python.
 
-
-**Project Repository:** https://github.com/Subham531/Task-Tracker-CLI
+[project url](https://roadmap.sh/projects/task-tracker)
 
 ## Features
 
